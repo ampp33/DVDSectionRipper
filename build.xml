@@ -1,0 +1,58 @@
+<project>
+
+	<path id="classpath-lib">
+		<fileset dir="build/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+	<target name="lib">
+        <mkdir dir="build/lib"/>
+        <copydir src="lib" dest="build/lib" />
+    </target>
+	
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes" classpathref="classpath-lib" />
+    	<copyfile src="src/log4j.properties" dest="build/classes/log4j.properties"/>
+    </target>
+	
+    <target name="jar">
+        <jar destfile="build/DVDSectionRipper.jar" basedir="build/classes">
+        	<manifest>
+                <attribute name="Main-Class" value="org.malibu.dvd.sectionripper.main.DVDSectionRipper"/>
+            </manifest>
+        </jar>
+    </target>
+	
+	<target name="resources">
+        <mkdir dir="build/resources"/>
+		<copyfile src="resources/icon.ico" dest="build/resources/icon.ico"/>
+		<copyfile src="resources/logo.png" dest="build/resources/logo.png"/>
+		<copyfile src="resources/DVDSectionRipper.bat" dest="build/DVDSectionRipper.bat"/>
+    </target>
+	
+	<target name="utils">
+        <mkdir dir="build/utils"/>
+		<mkdir dir="build/utils/mplayer"/>
+		<copyfile src="utils/libiconv-2.dll" dest="build/utils/libiconv-2.dll"/>
+		<copyfile src="utils/mencoder.exe" dest="build/utils/mencoder.exe"/>
+		<copyfile src="utils/mplayer.exe" dest="build/utils/mplayer.exe"/>
+		<copyfile src="utils/pthreadGC2.dll" dest="build/utils/pthreadGC2.dll"/>
+		<copyfile src="utils/xvidcore.dll" dest="build/utils/xvidcore.dll"/>
+		<copyfile src="utils/mplayer/config" dest="build/utils/mplayer/config"/>
+    </target>
+	
+	<target name="zip">
+		<!-- build dir cleanup before zipping -->
+		<delete dir="build/classes"/>
+		<zip destfile="build/DVDSectionRipper.zip" basedir="build" />
+	</target>
+
+	<target name="all" depends="clean,lib,compile,jar,resources,utils,zip" />
+	
+</project>
